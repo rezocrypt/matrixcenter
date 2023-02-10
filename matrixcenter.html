@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+    <h2>Գտնել եռաչափ մատրիցի կենտրոնից ամենահեռու և ամենամոտիկ գտնվող կետերի կոորդինատները</h2>
+    <input type="number" name="" placeholder="Enter X" id="x">
+    <input type="number" name="" placeholder="Enter Y" id="y">
+    <input type="number" name="" placeholder="Enter Z" id="z">
+    <input type="button" value="Calculate" onclick="calculate()">
+    
+    <p id="centers">Կենտրոնի կոորդինատները</p>
+    <h3 id="centerx"></h3>
+    <h3 id="centery"></h3>
+    <h3 id="centerz"></h3>
+
+    <p id="nearest">Ամենամոտիկ կոորդինատները</p>
+
+    <p id="farthest">Ամենահեռու կոորդինատները</p>
+
+
+
+    <script>
+
+        function insert_after(newNode, existingNode) {
+           existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+    }
+        function find_distance(x1, y1, z1, x2, y2, z2) {
+            let distance = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2)
+            return distance
+        }
+
+        function calculate() {
+           
+
+            let x_size = parseInt(document.getElementById("x").value)
+            let y_size = parseInt(document.getElementById("y").value)
+            let z_size = parseInt(document.getElementById("z").value)
+            let center_x = (x_size + 1)/2
+            let center_y = (y_size +1)/2
+            let center_z = (z_size +1 )/2
+            console.log(center_x);
+            console.log(center_y);
+            console.log(center_z);
+            let maximum_distance = 0
+            let minimum_distance = find_distance(1,1,1,center_x,center_y,center_z).toFixed(2)
+            let farthest_coordinates = []
+            let nearest_coordinates = []
+            
+            for (let z = 1; z <= z_size; z++) {
+                for (let y = 1; y <= y_size; y++) {
+                    for (let x = 1; x <= x_size; x++) {
+                        let distance = find_distance(x, y, z, center_x, center_y, center_z).toFixed(2);
+                        if (distance >= maximum_distance){
+                            maximum_distance = distance
+                        }
+                        if (distance <= minimum_distance){
+                            minimum_distance = distance
+                        }
+                        console.log(x,y,z,distance)
+                    }
+                }
+            }
+
+
+            for (let z = 1; z <= z_size; z++) {
+                for (let y = 1; y <= y_size; y++) {
+                    for (let x = 1; x <= x_size; x++) {
+                        let distance = find_distance(x, y, z, center_x, center_y, center_z).toFixed(2)
+                        if (distance >= maximum_distance){
+                            farthest_coordinates.push([x,y,z])
+                        }
+                        if (distance <= minimum_distance){
+                            nearest_coordinates.push([x,y,z])
+                        }
+                    }
+                }
+            }
+
+            console.log(maximum_distance,minimum_distance);
+            console.log(farthest_coordinates, nearest_coordinates);
+            
+            for (let i = 0; i < nearest_coordinates.length; i++) {
+                let span = document.createElement('span');
+                span.classList.add("temp");
+                let paragraph = document.getElementById("nearest")
+                span.textContent = `[${nearest_coordinates[i][0]},${nearest_coordinates[i][1]},${nearest_coordinates[i][2]}]`;
+                insert_after(span, paragraph)
+                insert_after(document.createElement("BR"), paragraph)
+            }
+
+            for (let i = 0; i < farthest_coordinates.length; i++) {
+                let span = document.createElement('span');
+                span.classList.add("temp");
+                let paragraph = document.getElementById("farthest")
+                span.textContent = `[${farthest_coordinates[i][0]},${farthest_coordinates[i][1]},${farthest_coordinates[i][2]}]`;
+                insert_after(span, paragraph)
+                insert_after(document.createElement("BR"), paragraph)
+            }
+            let span = document.createElement('span');
+            span.classList.add("temp");
+            let paragraph = document.getElementById("centers")
+            span.textContent = `[${center_x},${center_y},${center_z}]`;
+            insert_after(span, paragraph)
+            insert_after(document.createElement("BR"), paragraph)
+        }
+
+
+    </script>
+
+</body>
+
+</html>
